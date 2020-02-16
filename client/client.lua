@@ -60,7 +60,7 @@ Citizen.CreateThread(function()
 
 		local playerPed = GetPlayerPed(-1)
 
-		if IsPedInAnyVehicle(playerPed) == false or IsPedDeadOrDying(playerPed) == false then
+		if not IsPedInAnyVehicle(playerPed) or not IsPedDeadOrDying(playerPed) then
 			ped = GetPedInFront()
 		else
 			Citizen.Wait(500)
