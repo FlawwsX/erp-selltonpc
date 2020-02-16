@@ -27,12 +27,8 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
 
-		if ped == 0 then
-			--print("This is the only way it worked...")
-		else
-			if IsPedDeadOrDying(ped) or IsPedInAnyVehicle(ped) then
-				--print("Oh no.")
-			else
+		if ped ~= 0 then 
+			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
 				if ped ~= oldped and selling == false and (IsPedAPlayer(ped) == false and pedType ~= 28) then
 					TriggerServerEvent('checkD')
 					if has then
@@ -44,7 +40,11 @@ Citizen.CreateThread(function()
 						end
 					end
 				end
+			else
+				Citizen.Wait(500)
 			end
+		else
+			Citizen.Wait(500)	
 		end
 	end
 end)
@@ -62,6 +62,8 @@ Citizen.CreateThread(function()
 
 		if IsPedInAnyVehicle(playerPed) == false or IsPedDeadOrDying(playerPed) == false then
 			ped = GetPedInFront()
+		else
+			Citizen.Wait(500)
 		end
     end
 end)
