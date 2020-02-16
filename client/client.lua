@@ -27,17 +27,21 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
 
-		if IsEntityDead(ped) or IsPedSittingInAnyVehicle(ped) then
-			--print("Oh no.")
+		if ped == 0 then
+			--print("This is the only way it worked...")
 		else
-			if ped ~= oldped and selling == false then
-				TriggerServerEvent('checkD')
-				if has then
-					local pos = GetEntityCoords(ped)
-					DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell drugs')
-					if IsControlJustPressed(1, 86) then
-						selling = true
-						interact()
+			if IsPedDeadOrDying(ped) or IsPedInAnyVehicle(ped) then
+				--print("Oh no.")
+			else
+				if ped ~= oldped and selling == false and (IsPedAPlayer(ped) == false and pedType ~= 28) then
+					TriggerServerEvent('checkD')
+					if has then
+						local pos = GetEntityCoords(ped)
+						DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell drugs')
+						if IsControlJustPressed(1, 86) then
+							selling = true
+							interact()
+						end
 					end
 				end
 			end
@@ -52,11 +56,11 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(500)
+		Citizen.Wait(1000)
 
 		local playerPed = GetPlayerPed(-1)
 
-		if IsPedInAnyVehicle(playerPed) == false or IsEntityDead(playerPed) == false then
+		if IsPedInAnyVehicle(playerPed) == false or IsPedDeadOrDying(playerPed) == false then
 			ped = GetPedInFront()
 		end
     end
@@ -121,14 +125,14 @@ function interact()
 		exports['mythic_notify']:SendAlert('error', 'You sold ' .. weedamount .. ' weed for $' .. weedprice, 4000)
 		TriggerEvent("animation", source)
 		Citizen.Wait(1500)
-		TriggerServerEvent('np_selltonpc:dodeal', weedprice, weedamount)
+		TriggerServerEvent('np_scripts:dodeal', weedprice, weedamount)
 	else
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		streetName,_ = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
 		streetName = GetStreetNameFromHashKey(streetName)
 
 		exports['mythic_notify']:SendAlert('error', 'The buyer is calling the police!', 4000)
-		TriggerServerEvent('np_selltonpc:saleInProgress', streetName)
+		TriggerServerEvent('np_scripts:saleInProgress', streetName)
 	end
 	
 	selling = false
@@ -151,8 +155,8 @@ AddEventHandler('animation', function()
 	StopAnimTask(ped, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
 end)
 
-RegisterNetEvent('np_selltonpc:policeNotify')
-AddEventHandler('np_selltonpc:policeNotify', function(alert)
+RegisterNetEvent('np_scripts:policeNotify')
+AddEventHandler('np_scripts:policeNotify', function(alert)
 	if ESX.PlayerData.job.name == 'police' then
 
 		TriggerEvent('chat:addMessage', {
