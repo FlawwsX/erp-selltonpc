@@ -125,14 +125,14 @@ function interact()
 		exports['mythic_notify']:SendAlert('error', 'You sold ' .. weedamount .. ' weed for $' .. weedprice, 4000)
 		TriggerEvent("animation", source)
 		Citizen.Wait(1500)
-		TriggerServerEvent('np_scripts:dodeal', weedprice, weedamount)
+		TriggerServerEvent('np_selltonpc:dodeal', weedprice, weedamount)
 	else
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		streetName,_ = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
 		streetName = GetStreetNameFromHashKey(streetName)
 
 		exports['mythic_notify']:SendAlert('error', 'The buyer is calling the police!', 4000)
-		TriggerServerEvent('np_scripts:saleInProgress', streetName)
+		TriggerServerEvent('np_selltonpc:saleInProgress', streetName)
 	end
 	
 	selling = false
@@ -155,8 +155,8 @@ AddEventHandler('animation', function()
 	StopAnimTask(ped, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
 end)
 
-RegisterNetEvent('np_scripts:policeNotify')
-AddEventHandler('np_scripts:policeNotify', function(alert)
+RegisterNetEvent('np_selltonpc:policeNotify')
+AddEventHandler('np_selltonpc:policeNotify', function(alert)
 	if ESX.PlayerData.job.name == 'police' then
 
 		TriggerEvent('chat:addMessage', {
