@@ -2,7 +2,7 @@ fx_version 'adamant'
 
 game 'gta5'
 
-description 'NotPixel - Scripts mashed up'
+description 'NotPixel - Optimized sell weed to NPC'
 
 version '1.0.0'
 
