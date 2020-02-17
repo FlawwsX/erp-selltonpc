@@ -126,7 +126,7 @@ function interact()
 	if percent <= 4 then
 		exports['mythic_notify']:SendAlert('error', 'The buyer was not interested.', 4000)
 	elseif percent <= 9 then
-		if Config.EnableAnimation == true
+		if Config.EnableAnimation == true then
 			TriggerEvent("animation", source)
 		end
 		Citizen.Wait(1500)
