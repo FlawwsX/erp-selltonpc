@@ -124,7 +124,7 @@ function interact()
 	elseif percent <= 9 then
 		local weedprice = math.random(150, 500)
 		local weedamount = math.random(1, 5)		
-		exports['mythic_notify']:SendAlert('error', 'You sold ' .. weedamount .. ' weed for $' .. weedprice, 4000)
+		exports['mythic_notify']:SendAlert('success', 'You sold ' .. weedamount .. ' weed for $' .. weedprice, 4000)
 		TriggerEvent("animation", source)
 		Citizen.Wait(1500)
 		TriggerServerEvent('np_selltonpc:dodeal', weedprice, weedamount)
@@ -133,7 +133,7 @@ function interact()
 		streetName,_ = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
 		streetName = GetStreetNameFromHashKey(streetName)
 
-		exports['mythic_notify']:SendAlert('error', 'The buyer is calling the police!', 4000)
+		exports['mythic_notify']:SendAlert('inform', 'The buyer is calling the police!', 4000)
 		TriggerServerEvent('np_selltonpc:saleInProgress', streetName)
 	end
 	
