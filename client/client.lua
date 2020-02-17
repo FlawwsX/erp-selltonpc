@@ -29,7 +29,7 @@ Citizen.CreateThread(function()
 
 		if ped ~= 0 then 
 			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
-				if ped ~= oldped and selling == false and (IsPedAPlayer(ped) == false and pedType ~= 28) then
+				if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
 					TriggerServerEvent('checkD')
 					if has then
 						local pos = GetEntityCoords(ped)
@@ -122,12 +122,9 @@ function interact()
 	if percent <= 4 then
 		exports['mythic_notify']:SendAlert('error', 'The buyer was not interested.', 4000)
 	elseif percent <= 9 then
-		local weedprice = math.random(150, 500)
-		local weedamount = math.random(1, 5)		
-		exports['mythic_notify']:SendAlert('success', 'You sold ' .. weedamount .. ' weed for $' .. weedprice, 4000)
 		TriggerEvent("animation", source)
 		Citizen.Wait(1500)
-		TriggerServerEvent('np_selltonpc:dodeal', weedprice, weedamount)
+		TriggerServerEvent('np_selltonpc:dodeal')
 	else
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		streetName,_ = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
