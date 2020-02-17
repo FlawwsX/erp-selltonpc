@@ -103,18 +103,22 @@ function interact()
 	exports['progressBars']:startUI(3500, "Attempting to secure a sale...")
 	Citizen.Wait(3500)
 	
-	if ESX.PlayerData.job.name == 'police' then
-		exports['mythic_notify']:SendAlert('error', 'The buyer has seen you before, they know you\'re a cop!', 4000)
-		SetPedAsNoLongerNeeded(oldped)
-		selling = false
-		return
+	if Config.IgnorePolice == false then
+		if ESX.PlayerData.job.name == 'police' then
+			exports['mythic_notify']:SendAlert('error', 'The buyer has seen you before, they know you\'re a cop!', 4000)
+			SetPedAsNoLongerNeeded(oldped)
+			selling = false
+			return
+		end
 	end
 
-	if ped ~= oldped then
-		exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
-		SetPedAsNoLongerNeeded(oldped)
-		selling = false
-		return
+	if Config.DistanceCheck then
+		if ped ~= oldped then
+			exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
+			SetPedAsNoLongerNeeded(oldped)
+			selling = false
+			return
+		end
 	end
 
 	local percent = math.random(1, 11)
@@ -122,7 +126,9 @@ function interact()
 	if percent <= 4 then
 		exports['mythic_notify']:SendAlert('error', 'The buyer was not interested.', 4000)
 	elseif percent <= 9 then
-		TriggerEvent("animation", source)
+		if Config.EnableAnimation == true
+			TriggerEvent("animation", source)
+		end
 		Citizen.Wait(1500)
 		TriggerServerEvent('np_selltonpc:dodeal')
 	else

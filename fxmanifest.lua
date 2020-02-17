@@ -2,17 +2,19 @@ fx_version 'adamant'
 
 game 'gta5'
 
-description 'NotPixel - Scripts mashed up'
+description 'NotPixel - Sell drugs to NPC'
 
-version '1.0.0'
+version '1.0.2'
 
 server_scripts {
     '@async/async.lua',
     '@mysql-async/lib/MySQL.lua',
     
-    'server/server.lua'
+    'server/server.lua',
+    'config.lua'
 }
 
 client_scripts {
-    'client/client.lua'
+    'client/client.lua',
+    'config.lua'
 }
