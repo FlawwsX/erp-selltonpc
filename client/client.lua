@@ -27,8 +27,6 @@ Citizen.CreateThread(function()
 			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
 				if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
 					TriggerServerEvent('checkD')
-					
-					print(numberofcops)
 					if drugtype ~= false then
 						TriggerServerEvent('checkC')
 						if numberofcops >= Config.NumberOfCops then
