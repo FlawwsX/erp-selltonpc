@@ -3,6 +3,10 @@
 ESX                 = nil
 selling       = false
 local drugtype       = false
+local distancepoint = false
+local trigger = false
+local DistanceFromCity = 1000, -- set distance that player cant sell drugs too far from city
+local CityPoint = {x= 24.1806, y= -1721.6968, z= -29.2993}
 
 Citizen.CreateThread(function()
   	while ESX == nil do
@@ -22,12 +26,28 @@ AddEventHandler('esx:setJob', function(job)
 	ESX.PlayerData.job = job
 	Citizen.Wait(5000)
 end)
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1000)
+		if distancepoint then
+			local pos = GetEntityCoords(ped)
+			local distance = GetDistanceBetweenCoords(CityPoint.x, CityPoint.y, CityPoint.z, pos['x'], pos['y'], pos['z'], true)
+			if distance <= distanceFromCity then
+				trigger = true	
+			else
+				trigger = false		
+			end
+		else
+			trigger = false	
+		end
+	end
+end)
 
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
 		if ped ~= 0 then 
-			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
+			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) and distancepoint == trigger then
 				if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
 					TriggerServerEvent('checkD')
 					if drugtype ~= false then
@@ -155,14 +175,33 @@ end)
 
 RegisterNetEvent('animation')
 AddEventHandler('animation', function()
-  local pid = PlayerPedId()
-  RequestAnimDict("amb@prop_human_bum_bin@idle_b")
-  while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do Citizen.Wait(0) end
+	local pid = PlayerPedId()
+	--[[RequestAnimDict("amb@prop_human_bum_bin@idle_b")
+	while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do Citizen.Wait(0) end
 	TaskPlayAnim(pid,"amb@prop_human_bum_bin@idle_b","idle_d",100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
 	TaskPlayAnim(ped,"amb@prop_human_bum_bin@idle_b","idle_d",100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
-    Wait(1500)
+	Wait(1500)
 	StopAnimTask(pid, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
-	StopAnimTask(ped, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
+	StopAnimTask(ped, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)]]
+	RequestAnimDict("mp_common")
+	while (not HasAnimDictLoaded("mp_common")) do 
+		Citizen.Wait(0) 
+	end
+	TaskPlayAnim(pid,"mp_common","givetake1_a",100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
+	attachModel = GetHashKey("prop_drug_package_02")
+	SetCurrentPedWeapon(GetPlayerPed(-1), 0xA2719263) 
+	local bone = GetPedBoneIndex(GetPlayerPed(-1), 28422)
+	RequestModel(attachModel)
+	while not HasModelLoaded(attachModel) do
+		Citizen.Wait(100)
+	end
+	closestEntity = CreateObject(attachModel, 1.0, 1.0, 1.0, 1, 1, 0)
+	AttachEntityToEntity(closestEntity, GetPlayerPed(-1), bone, 0.02, 0.02, -0.08, 270.0, 180.0, 0.0, 1, 1, 0, true, 2, 1)
+	Citizen.Wait(1000)
+	if DoesEntityExist(closestEntity) then
+		DeleteEntity(closestEntity)
+	end
+	SetCurrentPedWeapon(GetPlayerPed(-1), GetHashKey("weapon_unarmed"), 1)
 end)
 
 RegisterNetEvent('np_selltonpc:policeNotify')
