@@ -28,13 +28,12 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 
 		-- Checking to see if they have enough weed to stop going negative...
 		if xPlayer.getInventoryItem(drugitemname).count >= itemamount then
-			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'You sold ' .. itemamount .. ' ' .. drugtype ..  ' for $' .. itemprice, length = 4000 })
-			Citizen.Wait(50) -- Because why not.
 			xPlayer.removeInventoryItem(drugitemname, itemamount)
 			local moneyamount = itemamount * itemprice
 			xPlayer.addAccountMoney('black_money', moneyamount)
+			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'You sold ' .. itemamount .. ' ' .. drugtype ..  ' for $' .. moneyamount, length = 4000 })
 		else
-			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'You do not have enough' .. ' ' .. drugtype .. ' to sell.', length = 5000, })
+			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'You do not have enough ' .. drugtype .. ' to sell.', length = 5000, })
 		end
 	end
 end)
