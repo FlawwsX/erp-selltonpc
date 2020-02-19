@@ -10,7 +10,7 @@ Config.EnableCoke = true
 Config.EnableMeth = true
 Config.EnableOpium = true
 
-Config.weedprice = 150
-Config.cokeprice = 300
-Config.methprice = 500
-Config.opiumprice = 1000
+Config.weedprice = math.random(150,300)
+Config.cokeprice = math.random(300,500)
+Config.methprice = math.random(500,750)
+Config.opiumprice = math.random(750,1000)

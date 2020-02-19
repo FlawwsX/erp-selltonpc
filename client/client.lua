@@ -1,10 +1,8 @@
 -- SELL DRUGS TO NPC --
 
-ESX                 = nil
-selling       = false
-local drugtype       = false
-local distancepoint = false
-local trigger = false
+local drugtype, selling, distancepoint, trigger = false, false, false, false
+ESX = nil
+
 local DistanceFromCity = 1000, -- set distance that player cant sell drugs too far from city
 local CityPoint = {x= 24.1806, y= -1721.6968, z= -29.2993}
 
@@ -132,7 +130,6 @@ function interact(drugtype)
 	end
 
 	-- Checks the distance between the PED and the seller before continuing.
-
 	if Config.DistanceCheck then
 		if ped ~= oldped then
 			exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
@@ -141,9 +138,7 @@ function interact(drugtype)
 			return
 		end
 	end
-
 	-- It all begins.
-
 	local percent = math.random(1, 11)
 
 	if percent <= 3 then
