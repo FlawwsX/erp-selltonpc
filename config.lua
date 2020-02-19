@@ -24,4 +24,3 @@ Config.MethAmount = math.random(1, 15)
 Config.EnableOpium = true
 Config.OpiumPrice = math.random(750,1000)
 Config.OpiumAmount = math.random(1, 20)
-© 2020 GitHub, Inc.
