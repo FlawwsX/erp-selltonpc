@@ -12,5 +12,5 @@ Config.EnableOpium = true
 
 Config.weedprice = math.random(150,300)
 Config.cokeprice = math.random(300,500)
-Config.methprice = math.randon(500,750)
+Config.methprice = math.random(500,750)
 Config.opiumprice = math.random(750,1000)
