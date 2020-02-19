@@ -1,4 +1,4 @@
-local drugtype, selling = false, false
+local drugtype, selling, numberofcops = false, false, 0
 ESX = nil
 
 Citizen.CreateThread(function()
@@ -27,12 +27,17 @@ Citizen.CreateThread(function()
 			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
 				if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
 					TriggerServerEvent('checkD')
+					
+					print(numberofcops)
 					if drugtype ~= false then
-						local pos = GetEntityCoords(ped)
-						DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell ' .. drugtype)
-						if IsControlJustPressed(1, 86) then
-							selling = true
-							interact(drugtype)
+						TriggerServerEvent('checkC')
+						if numberofcops >= Config.NumberOfCops then
+							local pos = GetEntityCoords(ped)
+							DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell ' .. drugtype)
+							if IsControlJustPressed(1, 86) then
+								selling = true
+								interact(drugtype)
+							end
 						end
 					end
 				end
@@ -46,6 +51,11 @@ end)
 RegisterNetEvent('checkR')
 AddEventHandler('checkR', function(drug)
   drugtype = drug
+end)
+
+RegisterNetEvent('checkC')
+AddEventHandler('checkC', function(cops)
+  numberofcops = cops
 end)
 
 Citizen.CreateThread(function()

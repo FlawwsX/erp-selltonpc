@@ -3,7 +3,7 @@ Config = {}
 Config.IgnorePolice = false -- Enable to allow police job to sell drugs.
 Config.DistanceCheck = true -- Enable to check if player has walked away from the ped or the ped has walked away.
 Config.EnableAnimation = true -- Weed sell animation
-Config.CallPoliceChance = 10 -- From 0 - 10
+Config.NumberOfCops = 1
 
 -- ## Weed ## --
 Config.EnableWeed = true
@@ -24,3 +24,4 @@ Config.MethAmount = math.random(1, 15)
 Config.EnableOpium = true
 Config.OpiumPrice = math.random(750,1000)
 Config.OpiumAmount = math.random(1, 20)
+© 2020 GitHub, Inc.

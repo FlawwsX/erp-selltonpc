@@ -38,6 +38,19 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 	end
 end)
 
+RegisterNetEvent('checkC')
+AddEventHandler('checkC', function()
+	local xPlayers = ESX.GetPlayers()
+	local cops = 0
+	for i=1, #xPlayers, 1 do
+ 	local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
+ 	if xPlayer.job.name == 'police' then
+			cops = cops + 1
+		end
+	end
+	TriggerClientEvent("checkC", source, cops)
+end)
+
 RegisterNetEvent('checkD')
 AddEventHandler('checkD', function()
 	local xPlayer = ESX.GetPlayerFromId(source)
