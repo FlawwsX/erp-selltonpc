@@ -13,19 +13,19 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 	if xPlayer ~= nil then
 		-- Start with the most frequent drug.
 		if drugtype == 'weed' then
+			itemamount = math.random(1,5)
 			itemprice = Config.weedprice
-			itemamount = math.random(1,5)
 		elseif drugtype == 'coke' then
+			itemamount = math.random(1,5)
 			itemprice = Config.cokeprice
-			itemamount = math.random(1,5)
 		elseif drugtype == 'meth' then
+			itemamount = math.random(1,5)
 			itemprice = Config.methprice
-			itemamount = math.random(1,5)
 		elseif drugtype == 'opium' then
-			itemprice = Config.opiumprice
 			itemamount = math.random(1,5)
+			itemprice = Config.opiumprice
 		end
-
+		itemprice = itemprice * itemamount
 		-- Checking to see if they have enough weed to stop going negative...
 		if xPlayer.getInventoryItem(drugitemname).count >= itemamount then
 			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'You sold ' .. itemamount .. ' ' .. drugtype ..  ' for $' .. itemprice, length = 4000 })
