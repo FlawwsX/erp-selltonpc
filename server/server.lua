@@ -13,17 +13,17 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 	if xPlayer ~= nil then
 		-- Start with the most frequent drug.
 		if drugtype == 'weed' then
-			itemprice = Config.weedprice
-			itemamount = math.random(1,5)
+			itemprice = Config.WeedPrice
+			itemamount = Config.WeedAmount
 		elseif drugtype == 'coke' then
-			itemprice = Config.cokeprice
-			itemamount = math.random(1,5)
+			itemprice = Config.CokePrice
+			itemamount = Config.CokeAmount
 		elseif drugtype == 'meth' then
-			itemprice = Config.methprice
-			itemamount = math.random(1,5)
+			itemprice = Config.MethPrice
+			itemamount = Config.MethAmount
 		elseif drugtype == 'opium' then
-			itemprice = Config.opiumprice
-			itemamount = math.random(1,5)
+			itemprice = Config.OpiumPrice
+			itemamount = Config.OpiumAmount
 		end
 
 		-- Checking to see if they have enough weed to stop going negative...
