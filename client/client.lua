@@ -1,8 +1,5 @@
--- SELL DRUGS TO NPC --
-
-ESX                 = nil
-selling       = false
-local drugtype       = false
+local drugtype, selling = false, false
+ESX = nil
 
 Citizen.CreateThread(function()
   	while ESX == nil do
@@ -112,7 +109,6 @@ function interact(drugtype)
 	end
 
 	-- Checks the distance between the PED and the seller before continuing.
-
 	if Config.DistanceCheck then
 		if ped ~= oldped then
 			exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
@@ -121,9 +117,7 @@ function interact(drugtype)
 			return
 		end
 	end
-
 	-- It all begins.
-
 	local percent = math.random(1, 11)
 
 	if percent <= 3 then
