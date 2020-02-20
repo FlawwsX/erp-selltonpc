@@ -26,13 +26,20 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 			itemamount = Config.OpiumAmount
 		end
 
-		-- Checking to see if they have enough weed to stop going negative...
+		if xPlayer.getInventoryItem(drugitemname).count == 1 then
+			itemamount = 1
+		elseif xPlayer.getInventoryItem(drugitemname).count == 2 then
+			itemamount = 2
+		elseif xPlayer.getInventoryItem(drugitemname).count == 3 then
+			itemamount = 3
+		end
+			
 		if xPlayer.getInventoryItem(drugitemname).count >= itemamount then
 			xPlayer.removeInventoryItem(drugitemname, itemamount)
 			local moneyamount = itemamount * itemprice
 			xPlayer.addAccountMoney('black_money', moneyamount)
 			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'You sold ' .. itemamount .. ' ' .. drugtype ..  ' for $' .. moneyamount, length = 4000 })
-		else
+		elseif 
 			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'You do not have enough ' .. drugtype .. ' to sell.', length = 5000, })
 		end
 	end
