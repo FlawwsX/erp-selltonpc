@@ -39,7 +39,7 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 			local moneyamount = itemamount * itemprice
 			xPlayer.addAccountMoney('black_money', moneyamount)
 			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'You sold ' .. itemamount .. ' ' .. drugtype ..  ' for $' .. moneyamount, length = 4000 })
-		elseif 
+		else
 			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'You do not have enough ' .. drugtype .. ' to sell.', length = 5000, })
 		end
 	end
