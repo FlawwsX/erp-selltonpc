@@ -26,15 +26,17 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 			itemamount = Config.OpiumAmount
 		end
 
-		if xPlayer.getInventoryItem(drugitemname).count == 1 then
+                local inventoryamount = xPlayer.getInventoryItem(drugitemname).count
+
+		if inventoryamount == 1 then
 			itemamount = 1
-		elseif xPlayer.getInventoryItem(drugitemname).count == 2 then
+		elseif inventoryamount == 2 then
 			itemamount = 2
-		elseif xPlayer.getInventoryItem(drugitemname).count == 3 then
+		elseif inventoryamount == 3 then
 			itemamount = 3
 		end
 			
-		if xPlayer.getInventoryItem(drugitemname).count >= itemamount then
+		if inventoryamount >= itemamount then
 			xPlayer.removeInventoryItem(drugitemname, itemamount)
 			local moneyamount = itemamount * itemprice
 			xPlayer.addAccountMoney('black_money', moneyamount)
