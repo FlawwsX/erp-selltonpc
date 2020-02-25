@@ -1,5 +1,8 @@
-local drugtype, selling, numberofcops = false, false, 0
-ESX = nil
+-- SELL DRUGS TO NPC --
+
+ESX                 = nil
+selling       = false
+local has       = false
 
 Citizen.CreateThread(function()
   	while ESX == nil do
@@ -23,37 +26,32 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
+
 		if ped ~= 0 then 
 			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
 				if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
 					TriggerServerEvent('checkD')
-					if drugtype ~= false then
-						TriggerServerEvent('checkC')
-						if numberofcops >= Config.NumberOfCops then
-							local pos = GetEntityCoords(ped)
-							DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell ' .. drugtype)
-							if IsControlJustPressed(1, 86) then
-								selling = true
-								interact(drugtype)
-							end
+					if has then
+						local pos = GetEntityCoords(ped)
+						DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell drugs')
+						if IsControlJustPressed(1, 86) then
+							selling = true
+							interact()
 						end
 					end
 				end
 			else
 				Citizen.Wait(500)
 			end
+		else
+			Citizen.Wait(500)	
 		end
 	end
 end)
 
 RegisterNetEvent('checkR')
-AddEventHandler('checkR', function(drug)
-  drugtype = drug
-end)
-
-RegisterNetEvent('checkC')
-AddEventHandler('checkC', function(cops)
-  numberofcops = cops
+AddEventHandler('checkR', function(test)
+  has = test
 end)
 
 Citizen.CreateThread(function()
@@ -96,7 +94,7 @@ function DrawText3Ds(x, y, z, text)
 	DrawRect(_x,_y + 0.0125, 0.015 + factor, 0.03, 0, 0, 0, 120)
 end
 
-function interact(drugtype)
+function interact()
 
 	oldped = ped
 	SetEntityAsMissionEntity(ped)
@@ -104,40 +102,29 @@ function interact(drugtype)
 
 	exports['progressBars']:startUI(3500, "Attempting to secure a sale...")
 	Citizen.Wait(3500)
-
-	-- Checks if they're a police officer
 	
-	if Config.IgnorePolice == false then
-		if ESX.PlayerData.job.name == 'police' then
-			exports['mythic_notify']:SendAlert('error', 'The buyer has seen you before, they know you\'re a cop!', 4000)
-			SetPedAsNoLongerNeeded(oldped)
-			selling = false
-			return
-		end
+	if ESX.PlayerData.job.name == 'police' then
+		exports['mythic_notify']:SendAlert('error', 'The buyer has seen you before, they know you\'re a cop!', 4000)
+		SetPedAsNoLongerNeeded(oldped)
+		selling = false
+		return
 	end
 
-	-- Checks the distance between the PED and the seller before continuing.
-	if Config.DistanceCheck then
-		if ped ~= oldped then
-			exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
-			SetPedAsNoLongerNeeded(oldped)
-			selling = false
-			return
-		end
+	if ped ~= oldped then
+		exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
+		SetPedAsNoLongerNeeded(oldped)
+		selling = false
+		return
 	end
-	-- It all begins.
+
 	local percent = math.random(1, 11)
 
-	if percent <= 3 then
+	if percent <= 4 then
 		exports['mythic_notify']:SendAlert('error', 'The buyer was not interested.', 4000)
-	elseif percent <= 10 then
-
-		if Config.EnableAnimation == true then
-			TriggerEvent("animation", source)
-		end
-
+	elseif percent <= 9 then
+		TriggerEvent("animation", source)
 		Citizen.Wait(1500)
-		TriggerServerEvent('np_selltonpc:dodeal', drugtype)
+		TriggerServerEvent('np_selltonpc:dodeal')
 	else
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		streetName,_ = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
