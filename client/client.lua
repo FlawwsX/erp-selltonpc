@@ -25,6 +25,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(10)
 		if ped ~= 0 then 
 			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
+                        local pedType = GetPedType(ped)
 				if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
 					TriggerServerEvent('checkD')
 					if drugtype ~= false then
