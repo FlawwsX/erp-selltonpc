@@ -152,9 +152,7 @@ function interact(drugtype)
 	SetPedAsNoLongerNeeded(oldped)
 end
 
-AddEventHandler('skinchanger:loadSkin', function(character)
-	playerGender = character.sex
-end)
+AddEventHandler('skinchanger:loadSkin', function(character) playerGender = character.sex end)
 
 RegisterNetEvent('animation')
 AddEventHandler('animation', function()
