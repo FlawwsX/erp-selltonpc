@@ -13,17 +13,17 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 	if xPlayer ~= nil then
 		-- Start with the most frequent drug.
 		if drugtype == 'weed' then
-			itemprice = Config.WeedPrice
-			itemamount = Config.WeedAmount
+			itemprice = math.random(150,300)
+			itemamount = math.random(1, 5)
 		elseif drugtype == 'coke' then
-			itemprice = Config.CokePrice
-			itemamount = Config.CokeAmount
+			itemprice = math.random(300,500)
+			itemamount = math.random(1, 10)
 		elseif drugtype == 'meth' then
-			itemprice = Config.MethPrice
-			itemamount = Config.MethAmount
+			itemprice = math.random(500,750)
+			itemamount = math.random(1, 15)
 		elseif drugtype == 'opium' then
-			itemprice = Config.OpiumPrice
-			itemamount = Config.OpiumAmount
+			itemprice = math.random(750,1000)
+			itemamount = math.random(1, 20)
 		end
 
                 local inventoryamount = xPlayer.getInventoryItem(drugitemname).count
