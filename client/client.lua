@@ -25,9 +25,13 @@ Citizen.CreateThread(function()
 		if ped ~= 0 and not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then 
             local pedType = GetPedType(ped)
 			if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
-				TriggerServerEvent('checkD')
+				TriggerServerEvent('checkR')
 				if drugtype ~= nil then
-					TriggerServerEvent('checkC')
+						
+					if Config.NumberOfCops > 0 then
+						TriggerServerEvent('checkC')
+					end
+						
 					if numberofcops >= Config.NumberOfCops then
 						local pos = GetEntityCoords(ped)
 						DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell ' .. drugtype)
