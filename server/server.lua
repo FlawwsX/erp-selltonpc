@@ -1,8 +1,7 @@
 ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-itemprice = nil
-itemamount = nil
+itemprice, itemamount = 0, 0
 
 RegisterNetEvent('np_selltonpc:dodeal')
 AddEventHandler('np_selltonpc:dodeal', function(drugtype)
@@ -26,7 +25,7 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 			itemamount = math.random(1, 20)
 		end
 
-                local inventoryamount = xPlayer.getInventoryItem(drugitemname).count
+        local inventoryamount = xPlayer.getInventoryItem(drugitemname).count
 
 		if inventoryamount == 1 then
 			itemamount = 1
@@ -62,6 +61,7 @@ end)
 
 RegisterNetEvent('checkD')
 AddEventHandler('checkD', function()
+	local src = source
 	local xPlayer = ESX.GetPlayerFromId(source)
 	if xPlayer ~= nil then
 		-- Since this is the only way to not make the server check for an item 4 times in a row
@@ -69,7 +69,7 @@ AddEventHandler('checkD', function()
 		if Config.EnableWeed then
 			local weed = xPlayer.getInventoryItem('weed_pooch').count
 			if weed >= 1 then
-				TriggerClientEvent("checkR", source, 'weed')
+				TriggerClientEvent("checkR", src, 'weed')
 				return
 			end
 		end
@@ -77,7 +77,7 @@ AddEventHandler('checkD', function()
 		if Config.EnableCoke then
 			local coke = xPlayer.getInventoryItem('coke_pooch').count
 			if coke >= 1 then
-				TriggerClientEvent("checkR", source, 'coke')
+				TriggerClientEvent("checkR", src, 'coke')
 				return
 			end
 		end
@@ -85,7 +85,7 @@ AddEventHandler('checkD', function()
 		if Config.EnableMeth then
 			local meth = xPlayer.getInventoryItem('meth_pooch').count
 			if meth >= 1 then
-				TriggerClientEvent("checkR", source, 'meth')
+				TriggerClientEvent("checkR", src, 'meth')
 				return
 			end
 		end
@@ -93,23 +93,17 @@ AddEventHandler('checkD', function()
 		if Config.EnableOpium then
 			local opium = xPlayer.getInventoryItem('opium_pooch').count
 			if opium >= 1 then
-				TriggerClientEvent("checkR", source, 'opium')
+				TriggerClientEvent("checkR", src, 'opium')
 				return
 			end
 		end
 
 		-- If they have nothing of the above, do this...
-		TriggerClientEvent("checkR", source, false)
+		TriggerClientEvent("checkR", src, false)
 	end
 end)
 
 RegisterServerEvent('np_selltonpc:saleInProgress')
-AddEventHandler('np_selltonpc:saleInProgress', function(streetName, playerGender)
-	if playerGender == 0 then
-		playerGender = 'Female'
-	else
-		playerGender = 'Male'
-	end
-
-	TriggerClientEvent('np_selltonpc:policeNotify', -1, 'Drug deal in progress: A ' .. playerGender .. ' has been spotted selling drugs at ' .. streetName)
+AddEventHandler('np_selltonpc:saleInProgress', function(streetName)
+	TriggerClientEvent('np_selltonpc:policeNotify', -1, 'Drug deal: An illegal sale has been spotted at ' ..streetName)
 end)
