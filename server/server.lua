@@ -5,44 +5,42 @@ itemprice, itemamount = 0, 0
 
 RegisterNetEvent('np_selltonpc:dodeal')
 AddEventHandler('np_selltonpc:dodeal', function(drugtype)
-
+	local src = source
 	drugitemname = drugtype .. '_pooch'
+		
+	-- Start with the most frequent drug.
+	if drugtype == 'weed' then
+		itemprice = math.random(150,300)
+		itemamount = math.random(1, 5)
+	elseif drugtype == 'coke' then
+		itemprice = math.random(300,500)
+		itemamount = math.random(1, 10)
+	elseif drugtype == 'meth' then
+		itemprice = math.random(500,750)
+		itemamount = math.random(1, 15)
+	elseif drugtype == 'opium' then
+		itemprice = math.random(750,1000)
+		itemamount = math.random(1, 20)
+	end
+	
+	local xPlayer = ESX.GetPlayerFromId(src)
+    local inventoryamount = xPlayer.getInventoryItem(drugitemname).count
 
-	local xPlayer = ESX.GetPlayerFromId(source)
-	if xPlayer ~= nil then
-		-- Start with the most frequent drug.
-		if drugtype == 'weed' then
-			itemprice = math.random(150,300)
-			itemamount = math.random(1, 5)
-		elseif drugtype == 'coke' then
-			itemprice = math.random(300,500)
-			itemamount = math.random(1, 10)
-		elseif drugtype == 'meth' then
-			itemprice = math.random(500,750)
-			itemamount = math.random(1, 15)
-		elseif drugtype == 'opium' then
-			itemprice = math.random(750,1000)
-			itemamount = math.random(1, 20)
-		end
-
-        local inventoryamount = xPlayer.getInventoryItem(drugitemname).count
-
-		if inventoryamount == 1 then
-			itemamount = 1
-		elseif inventoryamount == 2 then
-			itemamount = 2
-		elseif inventoryamount == 3 then
-			itemamount = 3
-		end
+	if inventoryamount == 1 then
+		itemamount = 1
+	elseif inventoryamount == 2 then
+		itemamount = 2
+	elseif inventoryamount == 3 then
+		itemamount = 3
+	end
 			
-		if inventoryamount >= itemamount then
-			xPlayer.removeInventoryItem(drugitemname, itemamount)
-			local moneyamount = itemamount * itemprice
-			xPlayer.addAccountMoney('black_money', moneyamount)
-			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'You sold ' .. itemamount .. ' ' .. drugtype ..  ' for $' .. moneyamount, length = 4000 })
-		else
-			TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'You do not have enough ' .. drugtype .. ' to sell.', length = 5000, })
-		end
+	if inventoryamount >= itemamount then
+		xPlayer.removeInventoryItem(drugitemname, itemamount)
+		local moneyamount = itemamount * itemprice
+		xPlayer.addAccountMoney('black_money', moneyamount)
+		TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'You sold ' .. itemamount .. ' ' .. drugtype ..  ' for $' .. moneyamount, length = 4000 })
+	else
+		TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'You do not have enough ' .. drugtype .. ' to sell.', length = 5000, })
 	end
 end)
 
