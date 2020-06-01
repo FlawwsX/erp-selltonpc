@@ -1,10 +1,7 @@
 fx_version 'adamant'
-
 game 'gta5'
-
-description 'NotPixel - Optimized sell drugs to NPC'
-
-version '1.0.3'
+description 'Optimized sell drugs to NPC'
+version '1.0.4'
 
 server_scripts {
     '@async/async.lua',
