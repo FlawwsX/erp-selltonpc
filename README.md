@@ -1,2 +1,2 @@
-# np_selltonpc
- A script to sell drugs to NPC, optimised client side.
+# Sell Drugs To NPC
+An optimized way of selling drugs to NPC.
