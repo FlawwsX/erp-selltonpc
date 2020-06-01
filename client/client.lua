@@ -1,4 +1,4 @@
-local drugtype, selling, numberofcops = false, false, 0
+local drugtype, selling, numberofcops = nil, false, 0
 ESX = nil
 
 Citizen.CreateThread(function()
@@ -17,28 +17,26 @@ end)
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
 	ESX.PlayerData.job = job
-	Citizen.Wait(5000)
 end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(10)
-		if ped ~= 0 then 
-			if not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then
-                        local pedType = GetPedType(ped)
-				if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
-					TriggerServerEvent('checkD')
-					if drugtype ~= false then
-						TriggerServerEvent('checkC')
-						if numberofcops >= Config.NumberOfCops then
-							local pos = GetEntityCoords(ped)
-							DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell ' .. drugtype)
-							if IsControlJustPressed(1, 86) then
-								selling = true
-								interact(drugtype)
-							end
+		Citizen.Wait(5)
+		if ped ~= 0 and not IsPedDeadOrDying(ped) and not IsPedInAnyVehicle(ped) then 
+            local pedType = GetPedType(ped)
+			if ped ~= oldped and not selling and (IsPedAPlayer(ped) == false and pedType ~= 28) then
+				TriggerServerEvent('checkD')
+				if drugtype ~= nil then
+					TriggerServerEvent('checkC')
+					if numberofcops >= Config.NumberOfCops then
+						local pos = GetEntityCoords(ped)
+						DrawText3Ds(pos.x, pos.y, pos.z, 'Press E to sell ' .. drugtype)
+						if IsControlJustPressed(1, 86) then
+							interact(drugtype)
 						end
 					end
+				else
+					Wait(5000)
 				end
 			else
 				Citizen.Wait(500)
@@ -59,15 +57,15 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(1000)
-
 		local playerPed = GetPlayerPed(-1)
 
 		if not IsPedInAnyVehicle(playerPed) or not IsPedDeadOrDying(playerPed) then
 			ped = GetPedInFront()
 		else
-			Citizen.Wait(500)
+			Citizen.Wait(1000)
 		end
+			
+		Citizen.Wait(1000)
     end
 end)
 
@@ -97,9 +95,9 @@ function DrawText3Ds(x, y, z, text)
 	DrawRect(_x,_y + 0.0125, 0.015 + factor, 0.03, 0, 0, 0, 120)
 end
 
-function interact(drugtype)
+function interact(type)
 
-	oldped = ped
+	oldped, selling, drugtype = ped, true, nil
 	SetEntityAsMissionEntity(ped)
 	TaskStandStill(ped, 9.0)
 
@@ -119,13 +117,12 @@ function interact(drugtype)
 
 	-- Checks the distance between the PED and the seller before continuing.
 	if Config.DistanceCheck then
-		if ped ~= oldped then
-			exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
-			SetPedAsNoLongerNeeded(oldped)
-			selling = false
-			return
-		end
+		exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
+		SetPedAsNoLongerNeeded(oldped)
+		selling = false
+		return
 	end
+	
 	-- It all begins.
 	local percent = math.random(1, 11)
 
@@ -137,8 +134,8 @@ function interact(drugtype)
 			TriggerEvent("animation", source)
 		end
 
-		Citizen.Wait(1500)
-		TriggerServerEvent('np_selltonpc:dodeal', drugtype)
+		Wait(1500)
+		TriggerServerEvent('np_selltonpc:dodeal', type)
 	else
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		streetName,_ = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
@@ -152,26 +149,19 @@ function interact(drugtype)
 	SetPedAsNoLongerNeeded(oldped)
 end
 
-AddEventHandler('skinchanger:loadSkin', function(character)
-	playerGender = character.sex
-end)
-
 RegisterNetEvent('animation')
 AddEventHandler('animation', function()
-  local pid = PlayerPedId()
-  RequestAnimDict("amb@prop_human_bum_bin@idle_b")
-  while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do Citizen.Wait(0) end
+  	local pid = PlayerPedId()
+  	RequestAnimDict("amb@prop_human_bum_bin@idle_b")
+  	while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do Citizen.Wait(0) end
 	TaskPlayAnim(pid,"amb@prop_human_bum_bin@idle_b","idle_d",100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
-	TaskPlayAnim(ped,"amb@prop_human_bum_bin@idle_b","idle_d",100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
     Wait(1500)
 	StopAnimTask(pid, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
-	StopAnimTask(ped, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
 end)
 
 RegisterNetEvent('np_selltonpc:policeNotify')
 AddEventHandler('np_selltonpc:policeNotify', function(alert)
 	if ESX.PlayerData.job.name == 'police' then
-
 		TriggerEvent('chat:addMessage', {
 			template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(48, 145, 255, 0.616); border-radius: 10px;">{0}</div>',
 			args = { alert }
