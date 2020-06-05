@@ -121,10 +121,12 @@ function interact(type)
 
 	-- Checks the distance between the PED and the seller before continuing.
 	if Config.DistanceCheck then
-		exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
-		SetPedAsNoLongerNeeded(oldped)
-		selling = false
-		return
+		if ped ~= oldped then
+			exports['mythic_notify']:SendAlert('error', 'You acted sketchy (moved far away) and the buyer was no longer interested.', 5000)
+			SetPedAsNoLongerNeeded(oldped)
+			selling = false
+			return
+		end
 	end
 	
 	-- It all begins.
