@@ -97,7 +97,7 @@ AddEventHandler('checkD', function()
 		end
 
 		-- If they have nothing of the above, do this...
-		TriggerClientEvent("checkR", src, false)
+		TriggerClientEvent("checkR", src, nil)
 	end
 end)
 
