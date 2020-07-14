@@ -110,7 +110,7 @@ function interact(type)
 
 	-- Checks if they're a police officer
 	
-	if Config.IgnorePolice == false then
+	if not Config.IgnorePolice then
 		if ESX.PlayerData.job.name == 'police' then
 			exports['mythic_notify']:SendAlert('error', 'The buyer has seen you before, they know you\'re a cop!', 4000)
 			SetPedAsNoLongerNeeded(oldped)
@@ -136,8 +136,8 @@ function interact(type)
 		exports['mythic_notify']:SendAlert('error', 'The buyer was not interested.', 4000)
 	elseif percent <= 10 then
 
-		if Config.EnableAnimation == true then
-			TriggerEvent("animation", source)
+		if Config.EnableAnimation then
+			TriggerEvent('animation')
 		end
 
 		Wait(1500)
