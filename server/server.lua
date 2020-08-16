@@ -10,17 +10,17 @@ AddEventHandler('np_selltonpc:dodeal', function(drugtype)
 		
 	-- Start with the most frequent drug.
 	if drugtype == 'weed' then
-		itemprice = math.random(150,300)
-		itemamount = math.random(1, 5)
+		itemprice = math.random(Config.WeedPriceMin,Config.WeedPriceMax)
+		itemamount = math.random(Config.WeedAmountMin, Config.WeedAmountMax)
 	elseif drugtype == 'coke' then
-		itemprice = math.random(300,500)
-		itemamount = math.random(1, 10)
+		itemprice = math.random(Config.CokePriceMin,Config.CokePriceMax)
+		itemamount = math.random(Config.CokeAmountMin, Config.CokeAmountMax)
 	elseif drugtype == 'meth' then
-		itemprice = math.random(500,750)
-		itemamount = math.random(1, 15)
+		itemprice = math.random(Config.MethPriceMin,Config.MethPriceMax)
+		itemamount = math.random(Config.MethAmountMin, Config.MethAmountMax)
 	elseif drugtype == 'opium' then
-		itemprice = math.random(750,1000)
-		itemamount = math.random(1, 20)
+		itemprice = math.random(Config.OpiumPriceMin,Config.OpiumPriceMax)
+		itemamount = math.random(Config.OpiumAmountMin, Config.OpiumAmountMax)
 	end
 	
 	local xPlayer = ESX.GetPlayerFromId(src)
